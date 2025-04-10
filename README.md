@@ -41,3 +41,18 @@ You can change the mediator mass from ```5000001 1.000000e+03 # MY1 ``` to ```50
 And please change the decay width from  ```DECAY 5000001 1.000000e+01 # WY1 ``` to ```DECAY 5000001 auto # WY1 ```
 
 Save the setting ```:wq```
+
+press ```1``` and enter in order to go to the run card.
+
+change this from ```10000 = nevents ! Number of unweighted events requested``` to ```100000 = nevents ! Number of unweighted events requested```
+
+And set like below in order to set 13.6 TeV of center of mass energy
+
+```
+     6800.0     = ebeam1  ! beam 1 total energy in GeV
+     6800.0     = ebeam2  ! beam 2 total energy in GeV
+```
+
+Save the setting ```:wq```
+
+and press ```0``` to run the process.
