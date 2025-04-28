@@ -14,7 +14,11 @@ def isGoodJet(pt, eta):
     mask = (pt > 30) & (np.abs(eta) < 2.4)
     return mask
 
-fname = "./tag_1_delphes_events.root"
+fname = "~/tag_1_delphes_events.root"
+
+genEvents = 1000
+xsec = 0.003203 ## pb
+lumi = 300000 ## pb-1
 
 # Open the ROOT file
 with uproot.open(fname) as file:
@@ -23,6 +27,7 @@ with uproot.open(fname) as file:
     
     # Define Electron and Muon variables
     prompt_electron_pt = tree["Electron.PT"].array()
+    print(len(prompt_electron_pt))
     prompt_electron_eta = tree["Electron.Eta"].array()
     electron_mask = isTightElectron(prompt_electron_pt, prompt_electron_eta)
     electron_pt, electron_eta = prompt_electron_pt[electron_mask], prompt_electron_eta[electron_mask]
@@ -63,14 +68,17 @@ with uproot.open(fname) as file:
     Leading_jet = ak.firsts(jet_pt[lepton_kinematic_mask])
     print(len(met_pt))
 
+    ## Normalize the histogram
+    weight_number = (lumi * xsec) / genEvents
+    print(met_pt)
     # Plotting
     plt.style.use(hep.style.CMS)
     plt.figure(figsize=(8, 8))
-    plt.hist(met_pt, bins=10, range=(0, 1000), histtype='step', color='blue',linewidth=2.5, label='Test Sample')
+    plt.hist(met_pt,weights=ak.ones_like(met_pt) * weight_number, bins=10, range=(0, 1000), histtype='step', color='blue',linewidth=2.5, label='Test Sample')
     plt.legend()
     plt.xlabel(r"$E_{T}^{miss}$ (GeV)")
     plt.ylabel("Events")
-    plt.savefig("met_pt.png")
+    plt.savefig("met_pt_norm.png")
 
     plt.figure(figsize=(8, 8))
     plt.hist(Leading_jet, bins=10, range=(0, 1000), histtype='step', color='blue',linewidth=2.5, label='Test Sample')
